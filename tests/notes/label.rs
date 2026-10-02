@@ -1,6 +1,6 @@
 use crate::scratch;
 use notes::label::edited_ago;
-use notes::{cli, note};
+use notes::{cli, note, sync::sync};
 use notesync::{Clock, ManualClock, Replica};
 
 const MINUTE: u64 = 60_000;
@@ -56,4 +56,23 @@ fn edited_label_shows_in_list() {
             "laptop-2  Groceries  (edited 1 minute ago)",
         ]
     );
+}
+
+/// The phone stores the laptop's change, stamped by a clock five minutes
+/// fast, then edits the note itself. Its own edit happened just now.
+#[test]
+fn edited_label_never_reads_ahead() {
+    let laptop_clock = ManualClock::new(NOW + 5 * MINUTE);
+    let phone_clock = ManualClock::new(NOW);
+    let root = scratch("edited_label_never_reads_ahead");
+    let mut laptop = Replica::open(&root.join("laptop"), &laptop_clock).unwrap();
+    let mut phone = Replica::open(&root.join("phone"), &phone_clock).unwrap();
+
+    let created = note::create(&mut laptop, "Keynote outline", "v1").unwrap();
+    sync(&mut phone, &mut laptop).unwrap();
+    note::edit(&mut phone, &created.id, None, Some("v2")).unwrap();
+
+    for line in cli::list(&phone, phone_clock.now_ms()) {
+        assert!(!line.contains("edited in"), "{line}");
+    }
 }
