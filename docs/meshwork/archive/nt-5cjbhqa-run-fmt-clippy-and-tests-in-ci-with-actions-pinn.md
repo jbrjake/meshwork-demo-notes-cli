@@ -1,7 +1,7 @@
 ---
 id: nt-5cjbhqa
 title: "Run fmt, clippy and tests in CI with actions pinned by SHA"
-status: open
+status: done
 category: build
 verify: exists .github/workflows/ci.yml
 created: 2026-10-02T17:27Z
@@ -11,3 +11,5 @@ CI runs `scripts/gate.sh` on every push and pull request, the same fmt, clippy a
 
 ## log
 - 2026-10-02T17:27Z created
+- 2026-10-02T17:27Z open→doing — claimed by claude (602c381b-d7db-491e-8df6-85682e6152ed)
+- 2026-10-02T17:27Z doing→done — verify exit 0 @ f814c24+1
