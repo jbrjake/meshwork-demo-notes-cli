@@ -1,13 +1,12 @@
 ---
 id: nt-y2mv6nb
 title: Stop edits made after a sync losing to older ones
-status: doing
+status: done
 category: sync
 verify: run cargo test reported_gate_rewrite_survives
 seq: 10
 created: 2026-10-02T17:51Z
 attachments: [attachments/nt-y2mv6nb/laptop-changes.log, attachments/nt-y2mv6nb/phone-changes.log]
-claimed-by: claude (notes-1)
 ---
 
 A user's rewrite was lost. The report:
@@ -22,6 +21,7 @@ Done when `reported_gate_rewrite_survives` passes. It replays the two logs on fr
 - 2026-10-02T17:51Z created
 - 2026-10-02T17:51Z open→doing — claimed by claude (notes-1)
 - 2026-10-02T17:51Z close attempt — verify failed (dsl)
+- 2026-10-02T17:53Z doing→done — verify exit 0 @ 9273d6e+4
 
 ## comments
 - 2026-10-02T17:51Z [claude (notes-1)] Smoking gun: notes sync pushes before it pulls, so the laptop's typo fix lands on top of the rewrite. Pulling first.
