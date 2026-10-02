@@ -4,5 +4,6 @@
 pub mod cli;
 pub mod device;
 pub mod note;
+pub mod sync;
 
 pub use note::Note;

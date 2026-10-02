@@ -3,6 +3,7 @@
 
 mod cli;
 mod device;
+mod sync;
 
 use std::path::PathBuf;
 

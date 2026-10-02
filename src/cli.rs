@@ -1,7 +1,7 @@
 //! The command line: parse the arguments, open the device folder, run one
 //! command.
 
-use crate::{device, note};
+use crate::{device, note, sync};
 use std::collections::BTreeMap;
 use std::io::{self, Read, Write};
 use std::path::PathBuf;
@@ -12,6 +12,7 @@ usage: notes [--device DIR] <command>
   edit ID [--title TEXT] [--body TEXT|-]  replace a note's title or body
   list                                    list every note
   show ID                                 print a note
+  sync OTHER_DIR                          trade changes with another device
 --body - reads the body from stdin. The device folder is --device, else
 $NOTES_DEVICE, else ./device.";
 
@@ -66,6 +67,18 @@ pub fn run(args: &[String], stdin: &mut dyn Read, out: &mut dyn Write) -> Result
             let found = note::get(&device::open(&dir)?, id)
                 .ok_or_else(|| Error::Failed(format!("no note {id}")))?;
             writeln!(out, "{}\n\n{}", found.title, found.body)?;
+        }
+        Some("sync") => {
+            let other = PathBuf::from(positional(&mut args, "sync needs OTHER_DIR")?);
+            options(&mut args, &[])?;
+            if !device::exists(&other) {
+                return Err(Error::Failed(format!(
+                    "no device folder at {}",
+                    other.display()
+                )));
+            }
+            let synced = sync::sync(&mut device::open(&dir)?, &mut device::open(&other)?)?;
+            writeln!(out, "sent {}, received {}", synced.sent, synced.received)?;
         }
         Some(other) => return Err(Error::Usage(format!("unknown command {other}"))),
         None => return Err(Error::Usage("no command".to_string())),

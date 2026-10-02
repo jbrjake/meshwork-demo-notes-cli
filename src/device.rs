@@ -9,6 +9,11 @@ pub fn dir(flag: Option<PathBuf>) -> PathBuf {
         .unwrap_or_else(|| PathBuf::from("device"))
 }
 
+/// Whether `dir` already holds a device.
+pub fn exists(dir: &Path) -> bool {
+    dir.join("device").is_file()
+}
+
 /// Opens the device folder at `dir`, creating it if needed. The folder's
 /// name is the device's id.
 pub fn open(dir: &Path) -> io::Result<Replica<SystemClock>> {
