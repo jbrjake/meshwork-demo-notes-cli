@@ -1,0 +1,73 @@
+//! Re-enacts the reported gate rewrite from the two devices' change logs.
+
+use crate::scratch;
+use notes::sync::sync;
+use notesync::{log, Change, ManualClock, Replica};
+use std::path::Path;
+
+const DEVICES: [&str; 2] = ["laptop", "phone"];
+
+/// Plays both logs on fresh device folders. A change a device made, it makes
+/// again with its clock reading what the log recorded. A change it received
+/// means the two devices synced, through the app's own sync.
+#[test]
+#[ignore = "waits on nt-jmvjckh"]
+fn reported_gate_rewrite_survives() {
+    let fixture = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/notes/fixtures/gate-rewrite");
+    let logs: Vec<Vec<Change>> = DEVICES
+        .iter()
+        .map(|device| log::read(&fixture.join(format!("{device}-changes.log"))).unwrap())
+        .collect();
+    assert!(
+        logs.iter().all(|log| !log.is_empty()),
+        "fixture logs missing"
+    );
+
+    let root = scratch("reported_gate_rewrite_survives");
+    let clocks = [ManualClock::new(0), ManualClock::new(0)];
+    let mut devices = [
+        Replica::open(&root.join(DEVICES[0]), &clocks[0]).unwrap(),
+        Replica::open(&root.join(DEVICES[1]), &clocks[1]).unwrap(),
+    ];
+    let mut next = [0, 0];
+    loop {
+        let mut progressed = false;
+        for d in 0..2 {
+            while let Some(change) = logs[d].get(next[d]) {
+                if change.device == DEVICES[d] {
+                    clocks[d].set(change.timestamp_ms);
+                    let made = devices[d].put(&change.doc, change.fields.clone()).unwrap();
+                    assert_eq!(made.seq, change.seq);
+                } else if !devices[d].seen().has_seen(change) {
+                    if !devices[1 - d].seen().has_seen(change) {
+                        break; // the other device has not made it yet
+                    }
+                    let [laptop, phone] = &mut devices;
+                    match d {
+                        0 => sync(laptop, phone),
+                        _ => sync(phone, laptop),
+                    }
+                    .unwrap();
+                }
+                next[d] += 1;
+                progressed = true;
+            }
+        }
+        if !progressed {
+            break;
+        }
+    }
+    assert_eq!(next, [logs[0].len(), logs[1].len()], "both logs replayed");
+
+    let rewrite = logs[1]
+        .iter()
+        .find(|change| change.device == "phone")
+        .expect("the phone's rewrite");
+    for (device, replica) in DEVICES.iter().zip(&devices) {
+        assert_eq!(
+            replica.doc(&rewrite.doc).unwrap().fields["body"],
+            rewrite.fields["body"],
+            "the {device} lost the phone's rewrite"
+        );
+    }
+}

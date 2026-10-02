@@ -2,8 +2,10 @@
 //! into a single binary.
 
 mod cli;
+mod contract;
 mod device;
 mod label;
+mod report;
 mod sync;
 
 use std::path::PathBuf;
