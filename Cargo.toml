@@ -3,6 +3,7 @@ name = "meshwork-demo-notes-cli"
 version = "0.1.0"
 edition = "2021"
 description = "Notes on the command line, synced between devices with notesync."
+license = "MIT"
 publish = false
 
 [lib]
