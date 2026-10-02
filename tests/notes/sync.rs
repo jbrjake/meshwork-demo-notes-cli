@@ -15,7 +15,7 @@ fn sync_two_devices_converge() {
     );
     assert_eq!(
         notes(&laptop, &["list"]),
-        "laptop-1  Keynote outline\nphone-1  Packing list\n"
+        "laptop-1  Keynote outline  (edited just now)\nphone-1  Packing list  (edited just now)\n"
     );
     assert_eq!(notes(&phone, &["list"]), notes(&laptop, &["list"]));
 

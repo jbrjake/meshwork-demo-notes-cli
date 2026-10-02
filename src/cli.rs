@@ -1,7 +1,8 @@
 //! The command line: parse the arguments, open the device folder, run one
 //! command.
 
-use crate::{device, note, sync};
+use crate::{device, label, note, sync, Note};
+use notesync::{Clock, Replica, SystemClock};
 use std::collections::BTreeMap;
 use std::io::{self, Read, Write};
 use std::path::PathBuf;
@@ -57,8 +58,8 @@ pub fn run(args: &[String], stdin: &mut dyn Read, out: &mut dyn Write) -> Result
         }
         Some("list") => {
             options(&mut args, &[])?;
-            for note in note::all(&device::open(&dir)?) {
-                writeln!(out, "{}  {}", note.id, note.title)?;
+            for line in list(&device::open(&dir)?, SystemClock.now_ms()) {
+                writeln!(out, "{line}")?;
             }
         }
         Some("show") => {
@@ -84,6 +85,19 @@ pub fn run(args: &[String], stdin: &mut dyn Read, out: &mut dyn Write) -> Result
         None => return Err(Error::Usage("no command".to_string())),
     }
     Ok(())
+}
+
+/// What `list` prints: each note's id, title and when it was last edited, as
+/// of `now_ms`.
+pub fn list<C: Clock>(device: &Replica<C>, now_ms: u64) -> Vec<String> {
+    note::docs(device)
+        .into_iter()
+        .map(|doc| {
+            let note = Note::from_doc(doc);
+            let edited = label::edited_ago(now_ms, doc.timestamp_ms);
+            format!("{}  {}  ({edited})", note.id, note.title)
+        })
+        .collect()
 }
 
 fn positional<'a>(

@@ -3,6 +3,7 @@
 
 pub mod cli;
 pub mod device;
+pub mod label;
 pub mod note;
 pub mod sync;
 

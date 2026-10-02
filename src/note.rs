@@ -65,9 +65,14 @@ pub fn get<C: Clock>(device: &Replica<C>, id: &str) -> Option<Note> {
 
 /// Every note, oldest first per device.
 pub fn all<C: Clock>(device: &Replica<C>) -> Vec<Note> {
-    let mut notes: Vec<Note> = device.docs().map(Note::from_doc).collect();
-    notes.sort_by(|a, b| id_order(&a.id).cmp(&id_order(&b.id)));
-    notes
+    docs(device).into_iter().map(Note::from_doc).collect()
+}
+
+/// Every note's document, in the same order as [`all`].
+pub fn docs<C: Clock>(device: &Replica<C>) -> Vec<&Doc> {
+    let mut docs: Vec<&Doc> = device.docs().collect();
+    docs.sort_by(|a, b| id_order(&a.id).cmp(&id_order(&b.id)));
+    docs
 }
 
 /// Orders `laptop-2` before `laptop-10`.

@@ -57,7 +57,7 @@ fn cli_new_edit_list_show() {
 
     assert_eq!(
         notes(&laptop, &["list"]),
-        "laptop-1  Keynote outline\nlaptop-2  Shopping\n"
+        "laptop-1  Keynote outline  (edited just now)\nlaptop-2  Shopping  (edited just now)\n"
     );
     assert_eq!(
         notes(&laptop, &["show", "laptop-1"]),
@@ -75,7 +75,10 @@ fn cli_reads_the_device_from_notes_device() {
         .unwrap();
     assert!(out.status.success(), "{}", stderr(&out));
     assert_eq!(String::from_utf8(out.stdout).unwrap(), "phone-1\n");
-    assert_eq!(notes(&phone, &["list"]), "phone-1  Packing list\n");
+    assert_eq!(
+        notes(&phone, &["list"]),
+        "phone-1  Packing list  (edited just now)\n"
+    );
 }
 
 #[test]
