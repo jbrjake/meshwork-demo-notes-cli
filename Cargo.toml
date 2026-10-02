@@ -1,0 +1,25 @@
+[package]
+name = "meshwork-demo-notes-cli"
+version = "0.1.0"
+edition = "2021"
+description = "Notes on the command line, synced between devices with notesync."
+publish = false
+
+[lib]
+name = "notes"
+
+[[bin]]
+name = "notes"
+path = "src/main.rs"
+
+[dependencies]
+notesync = { package = "meshwork-demo-notes-sync", git = "https://github.com/jbrjake/meshwork-demo-notes-sync", tag = "v0.1.0" }
+
+# Full debug info for the crate and every dependency is what grows target/
+# into the gigabytes; line tables keep backtraces readable.
+[profile.dev]
+debug = "line-tables-only"
+split-debuginfo = "unpacked"
+
+[profile.dev.package."*"]
+debug = false
