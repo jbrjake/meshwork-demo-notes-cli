@@ -1,7 +1,7 @@
 ---
 id: nt-25af1n9
 title: "Add new, edit, list and show"
-status: open
+status: done
 category: cli
 verify: run cargo test cli_
 created: 2026-10-02T17:24Z
@@ -20,3 +20,5 @@ The device folder is `--device`, else `$NOTES_DEVICE`, else `./device`. `--body 
 
 ## log
 - 2026-10-02T17:24Z created
+- 2026-10-02T17:24Z open→doing — claimed by claude (602c381b-d7db-491e-8df6-85682e6152ed)
+- 2026-10-02T17:25Z doing→done — verify exit 0 @ cd3beca+1
