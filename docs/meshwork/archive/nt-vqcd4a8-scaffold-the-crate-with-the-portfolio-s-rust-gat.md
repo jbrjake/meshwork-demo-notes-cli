@@ -1,11 +1,10 @@
 ---
 id: nt-vqcd4a8
 title: Scaffold the crate with the portfolio's Rust gate scaffold
-status: doing
+status: done
 category: build
 verify: "all(contains Cargo.toml /^\\[profile\\.dev\\]/, exists .cargo/config.toml, exists rust-toolchain.toml, exists tests/notes/main.rs)"
 created: 2026-10-02T17:22Z
-claimed-by: claude (602c381b-d7db-491e-8df6-85682e6152ed)
 ---
 
 A std-only crate, `meshwork-demo-notes-cli`: the library `notes` and the binary `notes`, on Rust 1.97.0. It depends on notesync by git tag, the way a separate project consumes it, and commits `Cargo.lock`.
@@ -19,3 +18,4 @@ The scaffold goes in with the first code:
 ## log
 - 2026-10-02T17:22Z created
 - 2026-10-02T17:22Z open→doing — claimed by claude (602c381b-d7db-491e-8df6-85682e6152ed)
+- 2026-10-02T17:22Z doing→done — verify exit 0 @ b10394b
