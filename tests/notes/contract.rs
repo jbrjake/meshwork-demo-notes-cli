@@ -10,7 +10,6 @@ const T: u64 = 1_790_000_000_000;
 /// An edit beats the changes its author had already seen, even when the
 /// other device's clock runs fast.
 #[test]
-#[ignore = "waits on nt-jmvjckh"]
 fn causal_order_survives_fast_clock() {
     let fast = ManualClock::new(T + 5 * MINUTE);
     let truth = ManualClock::new(T);

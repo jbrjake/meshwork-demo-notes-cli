@@ -11,5 +11,5 @@ dependencies = [
 
 [[package]]
 name = "meshwork-demo-notes-sync"
-version = "0.1.0"
-source = "git+https://github.com/jbrjake/meshwork-demo-notes-sync?tag=v0.1.0#ebac8eb797369ef9743b11b7a476e342972aada5"
+version = "0.2.0"
+source = "git+https://github.com/jbrjake/meshwork-demo-notes-sync?tag=v0.2.0#8a67f02c7da3fc0d89853a69a2ec3547547267b7"

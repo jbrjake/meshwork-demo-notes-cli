@@ -11,7 +11,6 @@ const DEVICES: [&str; 2] = ["laptop", "phone"];
 /// again with its clock reading what the log recorded. A change it received
 /// means the two devices synced, through the app's own sync.
 #[test]
-#[ignore = "waits on nt-jmvjckh"]
 fn reported_gate_rewrite_survives() {
     let fixture = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/notes/fixtures/gate-rewrite");
     let logs: Vec<Vec<Change>> = DEVICES

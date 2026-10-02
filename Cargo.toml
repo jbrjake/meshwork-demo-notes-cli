@@ -13,7 +13,7 @@ name = "notes"
 path = "src/main.rs"
 
 [dependencies]
-notesync = { package = "meshwork-demo-notes-sync", git = "https://github.com/jbrjake/meshwork-demo-notes-sync", tag = "v0.1.0" }
+notesync = { package = "meshwork-demo-notes-sync", git = "https://github.com/jbrjake/meshwork-demo-notes-sync", tag = "v0.2.0" }
 
 # Full debug info for the crate and every dependency is what grows target/
 # into the gigabytes; line tables keep backtraces readable.
