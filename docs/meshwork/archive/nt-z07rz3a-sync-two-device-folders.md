@@ -1,7 +1,7 @@
 ---
 id: nt-z07rz3a
 title: Sync two device folders
-status: open
+status: done
 category: sync
 verify: run cargo test sync_two_devices
 docs:
@@ -13,3 +13,5 @@ created: 2026-10-02T17:25Z
 
 ## log
 - 2026-10-02T17:25Z created
+- 2026-10-02T17:25Z open→doing — claimed by claude (602c381b-d7db-491e-8df6-85682e6152ed)
+- 2026-10-02T17:26Z doing→done — verify exit 0 @ db79012+1
